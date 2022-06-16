@@ -27,9 +27,9 @@ def login(mail, password):
 
     time.sleep(2)
 
-    res = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
-    cont = json.loads(res.content)
-    fres = cont['responseObject']['suiteStatus']
+#     res = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
+#     cont = json.loads(res.content)
+#     fres = cont['responseObject']['suiteStatus']
     sc = 0
     while (sc < 1):
         r1 = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
