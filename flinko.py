@@ -1,8 +1,11 @@
 import time
+from aifc import Error
 
 import requests
 import json
 
+class Execution_Failure(Error):
+    pass
 
 def login(mail, password):
     s = requests.Session()
@@ -27,19 +30,19 @@ def login(mail, password):
 
     time.sleep(2)
 
-#     res = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
-#     cont = json.loads(res.content)
-#     fres = cont['responseObject']['suiteStatus']
+    res = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
+    cont = json.loads(res.content)
+    fres = cont['responseObject']['suiteStatus']
     sc = 0
     while (sc < 1):
         r1 = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
         c1 = json.loads(r1.content)
         fr1 = c1['responseObject']['suiteStatus']
         if fr1 == 'PASS':
-            print('sucess')
+            print('Success')
             sc = 1
         if fr1 == 'FAIL':
-            print('failure')
+            raise Execution_Failure
             sc = 1
         time.sleep(3)
 
