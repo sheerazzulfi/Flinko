@@ -39,7 +39,6 @@ def login(mail, password):
             print('Success')
             sc = 1
         if fr1 == 'FAIL':
-            print('Execution failed')
             raise Execution_Failure
             sc = 1
         time.sleep(3)
