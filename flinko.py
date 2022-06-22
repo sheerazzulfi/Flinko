@@ -24,7 +24,7 @@ def login(mail, password):
     head["Authorization"] = "Bearer " + token
     time.sleep(3)
 
-    suiteid = 'SUITE1001'
+    suiteid = 'SUITE1002'
     pes = s.post('https://app.flinko.com:8109/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head)
     out = json.loads(pes.content)
     exid = out['responseObject']['id']
