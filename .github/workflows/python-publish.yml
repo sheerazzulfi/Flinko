@@ -24,6 +24,6 @@ jobs:
         python --version
         python -m pip install --upgrade pip
         python -m pip install requests
-        pyhton -m pip install OpenSSL
+        python -m pip install OpenSSL
     - name: flinko test
       run: python fire-flink.py ${{secrets.FIRE_FLINK_TOKEN}}
