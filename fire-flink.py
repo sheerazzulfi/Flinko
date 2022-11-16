@@ -1,3 +1,11 @@
+import time
+from aifc import Error
+
+import requests
+import json
+import sys
+import OpenSSL
+
 from OpenSSL import crypto, SSL
 
 def cert_gen(
@@ -43,12 +51,7 @@ cert_gen()
 
 
 
-import time
-from aifc import Error
 
-import requests
-import json
-import sys
 
 
 class Test_Failed(Error):
