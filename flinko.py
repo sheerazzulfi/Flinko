@@ -3,44 +3,51 @@ from aifc import Error
 
 import requests
 import json
+import sys
 
-class Execution_Failure(Error):
+
+class Test_Failed(Error):
     pass
 
-def login(mail, password):
+token = sys.argv[1]
+
+def login(token):
     s = requests.Session()
-    payload = {
-        'emailId': mail,
-        'password': password,
-    }
-    logurl = 'https://app.flinko.com:8101/optimize/v1/public/user/signin'
     head = {
         "accept": "application/json",
         "Content-Type": "application/json"
     }
-    resp = requests.post(logurl, json=payload)
-    tk = json.loads(resp.content)
-    token = tk['responseObject']['access_token']
     head["Authorization"] = "Bearer " + token
-    time.sleep(3)
-
     suiteid = 'SUITE1002'
-    pes = s.post('https://app.flinko.com:8109/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head)
+    baseUrl = 'http://10.10.10.30'
+    pes = s.post(baseUrl+':8209/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head)
     out = json.loads(pes.content)
     exid = out['responseObject']['id']
-    
+
     time.sleep(3)
     sc = 0
     while (sc < 1):
-        r1 = s.get('https://app.flinko.com:8110/optimize/v1/executionResponse/result/' + exid, headers=head)
+        r1 = s.get(baseUrl+':8209/optimize/v1/dashboard/execution/' + exid, headers=head)
         c1 = json.loads(r1.content)
-        fr1 = c1['responseObject']['suiteStatus']
-        if fr1 == 'PASS':
-            print('Success')
-            sc = 1
-        if fr1 == 'FAIL':
-            raise Execution_Failure
-            sc = 1
-        time.sleep(3)
+        fr1 = c1['responseObject']['executionStatus']
+        print('status : ' + fr1 + '......')
+        if (fr1 == "Completed" or fr1 == "Terminated"):
+            if fr1 == 'Completed':
+                r2 = s.get(baseUrl+':8210/optimize/v1/executionResponse/result/' + exid, headers=head)
+                c2 = json.loads(r2.content)
+                fr2 = c2['responseObject']['suiteStatus']
+                if fr2 == 'FAIL':
+                    raise Test_Failed
+                elif fr2 == 'WARNING':
+                    print('End Result : ' +'Warning')
+                elif fr2 == 'Aborted':
+                    print('End Result : ' +'Aborted')
+                else:
+                    print("End Result : " + 'Test Passed')
+                sc = 1
+            elif (fr1 == 'Terminated'):
+                print("End Result : " + fr1)
+                sc = 1
+        time.sleep(10)
 
-login('sheerazzulfi123@gmail.com', 'Ali5171*')
+login(token)
