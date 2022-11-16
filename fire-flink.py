@@ -22,7 +22,6 @@ def login(token):
     baseUrl = 'https://preprod1.fireflink.com'
     pes = s.post(baseUrl+':8081/dashboardexecution/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head, verify=False)
     rus = s.post(baseUrl+':8081/project/optimize/v1/suite/runSetting/' + suiteid, headers=head, verify=False)
-    ruo = json.loads(rus.content)
     out = json.loads(pes.content)
     exid = out['responseObject']['id']
 
