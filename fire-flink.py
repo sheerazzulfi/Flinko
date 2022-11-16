@@ -25,6 +25,7 @@ def login(token):
     # ruo = json.loads(rus.content)
     out = json.loads(pes.content)
     exid = out['responseObject']['id']
+    print(exid)
 
     time.sleep(3)
     sc = 0
