@@ -18,10 +18,10 @@ def login(token):
         "Content-Type": "application/json"
     }
     head["Authorization"] = "Bearer " + token
-    suiteid = 'SUITE1013'
-    baseUrl = 'https://preprod1.fireflink.com'
-    pes = s.post(baseUrl+':8081/dashboardexecution/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head, verify=False)
-    rus = s.post(baseUrl+':8081/project/optimize/v1/suite/runSetting/' + suiteid, headers=head, verify=False)
+    suiteid = 'SUITE1005'
+    baseUrl = 'https://backend.fireflink.com'
+    pes = s.post(baseUrl+':8109/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head)
+    rus = s.post(baseUrl+':8102/optimize/v1/suite/runSetting/' + suiteid, headers=head)
     # ruo = json.loads(rus.content)
     out = json.loads(pes.content)
     exid = out['responseObject']['id']
@@ -29,7 +29,7 @@ def login(token):
     time.sleep(3)
     sc = 0
     while (sc < 1):
-        r1 = s.get(baseUrl+':8081/dashboardexecution/optimize/v1/dashboard/execution/projects/PJT1001' + suiteid, headers=head, verify=False)
+        r1 = s.get(baseUrl+':8109/optimize/v1/dashboard/execution/projects/PJT1001' + suiteid, headers=head)
         c1 = json.loads(r1.content)
         fr1 = c1['responseObject'][0]['executionStatus']
         # fr1 = c1['responseObject']['_id']
