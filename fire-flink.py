@@ -18,34 +18,34 @@ def login(token):
         "Content-Type": "application/json"
     }
     head["Authorization"] = "Bearer " + token
-    suiteid = 'SUITE1002'
+    suiteid = 'SUITE1005'
     baseUrl = 'https://backend.fireflink.com'
 
     run = s.get(baseUrl + ':8102/optimize/v1/suite/runSetting/run/' + suiteid, headers=head)
     runout = json.loads(run.content)
     rob = runout['responseObject']
-    pes = s.post(baseUrl+':8209/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head, json=rob)
+    pes = s.post(baseUrl+':8109/optimize/v1/dashboard/execution/suite/' + suiteid, headers=head, json=rob)
     out = json.loads(pes.content)
     exid = out['responseObject']['id']
 
     time.sleep(3)
     sc = 0
     while (sc < 1):
-        r1 = s.get(baseUrl+':8209/optimize/v1/dashboard/execution/' + exid, headers=head)
+        r1 = s.get(baseUrl + ':8109/optimize/v1/dashboard/execution/' + exid, headers=head)
         c1 = json.loads(r1.content)
         fr1 = c1['responseObject']['executionStatus']
         print('status : ' + fr1 + '......')
         if (fr1 == "Completed" or fr1 == "Terminated"):
             if fr1 == 'Completed':
-                r2 = s.get(baseUrl+':8210/optimize/v1/executionResponse/result/' + exid, headers=head)
+                r2 = s.get(baseUrl + ':8110/optimize/v1/executionResponse/result/' + exid, headers=head)
                 c2 = json.loads(r2.content)
                 fr2 = c2['responseObject']['suiteStatus']
                 if fr2 == 'FAIL':
                     raise Test_Failed
                 elif fr2 == 'WARNING':
-                    print('End Result : ' +'Warning')
+                    print('End Result : ' + 'Warning')
                 elif fr2 == 'Aborted':
-                    print('End Result : ' +'Aborted')
+                    print('End Result : ' + 'Aborted')
                 else:
                     print("End Result : " + 'Test Passed')
                 sc = 1
